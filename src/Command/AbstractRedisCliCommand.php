@@ -17,10 +17,10 @@ class AbstractRedisCliCommand extends Command
     protected function getRedis(): \Redis
     {
         $redis = new \Redis;
-        $redis->connect(getenv('REDIS_HOST'), (int) getenv('REDIS_PORT'), 10);
+        $redis->connect($this->getEnv('REDIS_HOST'), (int)$this->getEnv('REDIS_PORT'), 10);
 
-        if (getenv('REDIS_DB')) {
-            $redis->select(getenv('REDIS_DB'));
+        if ($this->getEnv('REDIS_DB')) {
+            $redis->select((int) $this->getEnv('REDIS_DB'));
         }
 
         return $redis;
@@ -29,7 +29,7 @@ class AbstractRedisCliCommand extends Command
     protected function checkEnvVariables(array $variables): void
     {
         foreach ($variables as $name) {
-            if (getenv($name) === false) {
+            if ($this->getEnv($name) === null) {
                 throw new \InvalidArgumentException(sprintf('%s environment is not provided', $name));
             }
         }
@@ -47,13 +47,16 @@ class AbstractRedisCliCommand extends Command
             : $this->getRootPath() . DIRECTORY_SEPARATOR . $envFilename;
 
         if (!is_readable($envFilepath)) {
-            throw new \InvalidArgumentException(
-                'Cannot read provided dotEnv file at: ' . $envFilepath
-            );
+            throw new \InvalidArgumentException('Cannot read provided dotEnv file at: ' . $envFilepath);
         }
 
         $output->writeln('Loading env file from: ' . $envFilename);
 
         (new Dotenv(true))->overload($envFilepath);
+    }
+
+    private function getEnv(string $name): ?string
+    {
+        return $_ENV[$name] ?? $_SERVER[$name] ?? (getenv($name) === false ? null : getenv($name));
     }
 }

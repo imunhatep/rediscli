@@ -23,8 +23,7 @@ class RedisFlushAllCommand extends AbstractRedisCliCommand
                 'dot-env',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Path till dotEnv filename, with environment variables: REDIS_HOST, REDIS_PORT',
-                '.env'
+                'Path till dotEnv filename, with environment variables: REDIS_HOST, REDIS_PORT'
             )
         ;
     }
