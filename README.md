@@ -31,3 +31,8 @@ REDIS_HOST=1.2.3.4 REDIS_PORT=6379 REDIS_DB=0 ./bin/redis-cli r:c:flushall
 ```bash
 ./bin/redis-cli r:c:flushdb --dot-env=".env"
 ```
+
+`flushbd` if env variables are set in shell
+```bash
+./bin/redis-cli r:c:flushdb
+```
